@@ -1,4 +1,5 @@
 import "react-native-gesture-handler";
+import { Provider } from "react-redux";
 import { StyleSheet } from "react-native";
 import { Entypo } from "@expo/vector-icons";
 import { StatusBar } from "expo-status-bar";
@@ -6,7 +7,8 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-import FavoriteContextProvider from "./store/context/favorites-context";
+// import FavoriteContextProvider from "./store/context/favorites-context";
+import store from "./store/redux/store";
 
 import {
   CategoriesScreen,
@@ -63,7 +65,7 @@ export default function App() {
   return (
     <>
       <StatusBar style="light" />
-      <FavoriteContextProvider>
+      <Provider store={store}>
         <NavigationContainer>
           <Stack.Navigator
             screenOptions={{
@@ -97,7 +99,7 @@ export default function App() {
             />
           </Stack.Navigator>
         </NavigationContainer>
-      </FavoriteContextProvider>
+      </Provider>
     </>
   );
 }

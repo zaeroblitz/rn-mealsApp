@@ -1,11 +1,15 @@
 import { useContext, useLayoutEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
 
 import { MealTag, IconButton } from "../components";
 import { FavoriteContext } from "../store/context/favorites-context";
+import { addFavorite, removeFavorite } from "../store/redux/favorites";
 
 const MealDetailScreen = ({ route, navigation }) => {
-  const favoriteMealsCtx = useContext(FavoriteContext);
+  // const favoriteMealsCtx = useContext(FavoriteContext);
+  const favoriteMeals = useSelector((state) => state.favoriteMeals.ids);
+  const dispatch = useDispatch();
 
   const {
     id,
@@ -22,13 +26,13 @@ const MealDetailScreen = ({ route, navigation }) => {
     isLactoseFree,
   } = route.params.mealData;
 
-  const mealIsFavorite = favoriteMealsCtx.ids.includes(id);
+  const mealIsFavorite = favoriteMeals.includes(id);
 
   const toogleFavoritMealHandler = () => {
     if (mealIsFavorite) {
-      favoriteMealsCtx.removeFavorite(id);
+      dispatch(removeFavorite({ id }));
     } else {
-      favoriteMealsCtx.addFavorite(id);
+      dispatch(addFavorite({ id }));
     }
   };
 

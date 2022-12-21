@@ -1,17 +1,14 @@
-import { useLayoutEffect } from "react";
-import {
-  Button,
-  Image,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
+import { useContext, useLayoutEffect } from "react";
+import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
 
 import { MealTag, IconButton } from "../components";
+import { FavoriteContext } from "../store/context/favorites-context";
 
 const MealDetailScreen = ({ route, navigation }) => {
+  const favoriteMealsCtx = useContext(FavoriteContext);
+
   const {
+    id,
     title,
     affordability,
     complexity,
@@ -25,21 +22,27 @@ const MealDetailScreen = ({ route, navigation }) => {
     isLactoseFree,
   } = route.params.mealData;
 
-  const handleButtonPressHandler = () => {
-    console.log("Pressed!");
+  const mealIsFavorite = favoriteMealsCtx.ids.includes(id);
+
+  const toogleFavoritMealHandler = () => {
+    if (mealIsFavorite) {
+      favoriteMealsCtx.removeFavorite(id);
+    } else {
+      favoriteMealsCtx.addFavorite(id);
+    }
   };
 
   useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
         <IconButton
-          icon="heart"
-          color="white"
-          onPress={handleButtonPressHandler}
+          icon={mealIsFavorite ? "heart" : "hearto"}
+          color={mealIsFavorite ? "#FF597B" : "white"}
+          onPress={toogleFavoritMealHandler}
         />
       ),
     });
-  }, [navigation, handleButtonPressHandler]);
+  }, [navigation, toogleFavoritMealHandler]);
 
   return (
     <ScrollView style={styles.container}>
